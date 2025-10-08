@@ -2,6 +2,7 @@ import type React from "react"
 import Link from "next/link"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { MobileNav } from "@/components/mobile-nav"
 
 const navigation = [
   { title: "Introduction", href: "/docs/intro" },
@@ -15,6 +16,7 @@ const navigation = [
   { title: "Database Schema", href: "/docs/db-schema" },
   { title: "Health & Security", href: "/docs/health-security" },
   { title: "Deployment", href: "/docs/deployment" },
+  { title: "API Console", href: "/docs/console" },
 ]
 
 export default function DocsLayout({ children }: { children: React.ReactNode }) {
@@ -22,9 +24,12 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
     <div className="flex min-h-screen flex-col">
       <header className="border-b sticky top-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container flex h-14 items-center justify-between px-4">
-          <Link href="/" className="flex items-center gap-2 font-bold">
-            WhatsApp API
-          </Link>
+          <div className="flex items-center gap-2">
+            <MobileNav />
+            <Link href="/" className="flex items-center gap-2 font-bold">
+              WhatsApp API
+            </Link>
+          </div>
           <ThemeToggle />
         </div>
       </header>
@@ -51,7 +56,7 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
 
         {/* Main Content */}
         <main className="flex-1">
-          <div className="container max-w-4xl py-8 px-4">{children}</div>
+          <div className="container max-w-4xl py-6 px-4 sm:py-8">{children}</div>
         </main>
       </div>
     </div>
