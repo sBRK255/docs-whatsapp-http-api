@@ -21,6 +21,15 @@ interface ConsoleResponse {
   error?: string
 }
 
+const formatResponse = (response: string): string => {
+  try {
+    const parsed = JSON.parse(response)
+    return JSON.stringify(parsed, null, 2)
+  } catch {
+    return response
+  }
+}
+
 export function ApiConsole() {
   const { baseUrl } = useApiConfig()
   const [method, setMethod] = useState("POST")
@@ -72,7 +81,7 @@ export function ApiConsole() {
             method,
             url: fullUrl,
             status: result.status,
-            response: result.data,
+            response: typeof result.data === "string" ? result.data : JSON.stringify(result.data),
           },
           ...prev,
         ])
@@ -272,12 +281,12 @@ export function ApiConsole() {
                           </Button>
                         </div>
                         {resp.response && (
-                          <pre className="text-xs bg-muted p-3 rounded overflow-x-auto">
-                            <code>{resp.response}</code>
+                          <pre className="text-xs bg-muted p-3 rounded overflow-x-auto whitespace-pre-wrap break-words">
+                            <code>{formatResponse(resp.response)}</code>
                           </pre>
                         )}
                         {resp.error && (
-                          <pre className="text-xs bg-red-500/10 text-red-500 p-3 rounded overflow-x-auto">
+                          <pre className="text-xs bg-red-500/10 text-red-500 p-3 rounded overflow-x-auto whitespace-pre-wrap break-words">
                             <code>{resp.error}</code>
                           </pre>
                         )}
@@ -398,12 +407,12 @@ export function ApiConsole() {
                       </Button>
                     </div>
                     {resp.response && (
-                      <pre className="text-xs bg-muted p-3 rounded overflow-x-auto">
-                        <code>{resp.response}</code>
+                      <pre className="text-xs bg-muted p-3 rounded overflow-x-auto whitespace-pre-wrap break-words">
+                        <code>{formatResponse(resp.response)}</code>
                       </pre>
                     )}
                     {resp.error && (
-                      <pre className="text-xs bg-red-500/10 text-red-500 p-3 rounded overflow-x-auto">
+                      <pre className="text-xs bg-red-500/10 text-red-500 p-3 rounded overflow-x-auto whitespace-pre-wrap break-words">
                         <code>{resp.error}</code>
                       </pre>
                     )}
