@@ -9,7 +9,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Switch } from "@/components/ui/switch"
-import { Play, Trash2, Copy, Check } from "lucide-react"
+import { Play, Trash2, Copy, Check, Maximize2, Minimize2, Maximize } from "lucide-react"
 import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable"
 
 interface ConsoleResponse {
@@ -30,6 +30,9 @@ export function ApiConsole() {
   const [responses, setResponses] = useState<ConsoleResponse[]>([])
   const [loading, setLoading] = useState(false)
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null)
+  const [requestCollapsed, setRequestCollapsed] = useState(false)
+  const [responseCollapsed, setResponseCollapsed] = useState(false)
+  const [isFullscreen, setIsFullscreen] = useState(false)
 
   const executeRequest = async () => {
     setLoading(true)
@@ -100,13 +103,49 @@ export function ApiConsole() {
   }
 
   return (
-    <div className="w-full">
+    <div className={isFullscreen ? "fixed inset-0 z-50 bg-background p-4" : "w-full"}>
+      <div className="flex justify-end mb-2">
+        <Button variant="outline" size="sm" onClick={() => setIsFullscreen(!isFullscreen)} className="gap-2">
+          {isFullscreen ? (
+            <>
+              <Minimize2 className="h-4 w-4" />
+              Exit Fullscreen
+            </>
+          ) : (
+            <>
+              <Maximize className="h-4 w-4" />
+              Fullscreen
+            </>
+          )}
+        </Button>
+      </div>
+
       <div className="hidden lg:block">
-        <ResizablePanelGroup direction="horizontal" className="min-h-[600px] rounded-lg border">
-          <ResizablePanel defaultSize={35} minSize={25} maxSize={50}>
+        <ResizablePanelGroup
+          direction="horizontal"
+          className={`rounded-lg border ${isFullscreen ? "h-[calc(100vh-8rem)]" : "min-h-[600px]"}`}
+        >
+          <ResizablePanel
+            defaultSize={35}
+            minSize={20}
+            maxSize={80}
+            collapsible={true}
+            collapsedSize={0}
+            onCollapse={() => setRequestCollapsed(true)}
+            onExpand={() => setRequestCollapsed(false)}
+          >
             <Card className="flex flex-col h-full border-0 rounded-none">
-              <div className="border-b bg-muted/50 px-4 py-3">
+              <div className="border-b bg-muted/50 px-4 py-3 flex items-center justify-between">
                 <h3 className="font-semibold">Request</h3>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setRequestCollapsed(!requestCollapsed)}
+                  className="h-8 w-8 p-0"
+                  title={requestCollapsed ? "Show request" : "Hide request"}
+                >
+                  {requestCollapsed ? <Maximize2 className="h-4 w-4" /> : <Minimize2 className="h-4 w-4" />}
+                </Button>
               </div>
               <ScrollArea className="flex-1">
                 <div className="p-3 space-y-3">
@@ -173,10 +212,27 @@ export function ApiConsole() {
 
           <ResizableHandle withHandle />
 
-          <ResizablePanel defaultSize={65} minSize={50}>
+          <ResizablePanel
+            defaultSize={65}
+            minSize={20}
+            maxSize={80}
+            collapsible={true}
+            collapsedSize={0}
+            onCollapse={() => setResponseCollapsed(true)}
+            onExpand={() => setResponseCollapsed(false)}
+          >
             <Card className="flex flex-col h-full border-0 rounded-none">
-              <div className="border-b bg-muted/50 px-4 py-3">
+              <div className="border-b bg-muted/50 px-4 py-3 flex items-center justify-between">
                 <h3 className="font-semibold">Response</h3>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setResponseCollapsed(!responseCollapsed)}
+                  className="h-8 w-8 p-0"
+                  title={responseCollapsed ? "Show response" : "Hide response"}
+                >
+                  {responseCollapsed ? <Maximize2 className="h-4 w-4" /> : <Minimize2 className="h-4 w-4" />}
+                </Button>
               </div>
               <ScrollArea className="flex-1">
                 {responses.length === 0 ? (
@@ -235,7 +291,6 @@ export function ApiConsole() {
         </ResizablePanelGroup>
       </div>
 
-      {/* Mobile layout - stacked */}
       <div className="lg:hidden grid grid-cols-1 gap-4">
         <Card className="flex flex-col">
           <div className="border-b bg-muted/50 px-4 py-3">
@@ -268,12 +323,12 @@ export function ApiConsole() {
 
             <div className="flex items-center justify-between p-3 border rounded-md">
               <div className="space-y-0.5">
-                <Label htmlFor="include-body" className="text-sm font-medium">
+                <Label htmlFor="include-body-mobile" className="text-sm font-medium">
                   Include Request Body
                 </Label>
                 <p className="text-xs text-muted-foreground">Enable to send a JSON body with your request</p>
               </div>
-              <Switch id="include-body" checked={includeBody} onCheckedChange={setIncludeBody} />
+              <Switch id="include-body-mobile" checked={includeBody} onCheckedChange={setIncludeBody} />
             </div>
 
             {includeBody && (
