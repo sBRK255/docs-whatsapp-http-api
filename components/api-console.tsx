@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useApiConfig } from "@/lib/api-config"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -21,6 +22,7 @@ interface ConsoleResponse {
 }
 
 export function ApiConsole() {
+  const { baseUrl } = useApiConfig()
   const [method, setMethod] = useState("POST")
   const [endpoint, setEndpoint] = useState("/sessions/:id/send-message")
   const [body, setBody] = useState('{\n  "to": "+1234567890",\n  "message": "Hello from API"\n}')
@@ -28,8 +30,6 @@ export function ApiConsole() {
   const [responses, setResponses] = useState<ConsoleResponse[]>([])
   const [loading, setLoading] = useState(false)
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null)
-
-  const baseUrl = "https://codeskytz-api-lajj0.sevalla.app"
 
   const executeRequest = async () => {
     setLoading(true)
@@ -46,6 +46,7 @@ export function ApiConsole() {
           method,
           endpoint,
           body: includeBody ? body : undefined,
+          baseUrl,
         }),
       })
 

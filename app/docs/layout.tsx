@@ -3,6 +3,7 @@ import Link from "next/link"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { MobileNav } from "@/components/mobile-nav"
+import { Settings } from "lucide-react"
 
 const navigation = [
   { title: "Introduction", href: "/docs/intro" },
@@ -30,7 +31,12 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
               WhatsApp API
             </Link>
           </div>
-          <ThemeToggle />
+          <div className="flex items-center gap-2">
+            <Link href="/admin">
+              <Settings className="h-5 w-5 text-muted-foreground hover:text-foreground transition-colors" />
+            </Link>
+            <ThemeToggle />
+          </div>
         </div>
       </header>
 
@@ -49,6 +55,13 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
                     {item.title}
                   </Link>
                 ))}
+                <Link
+                  href="/admin"
+                  className="flex items-center gap-2 px-3 py-2 rounded-md text-sm hover:bg-accent hover:text-accent-foreground transition-colors border-t mt-2 pt-3"
+                >
+                  <Settings className="h-4 w-4" />
+                  Admin Panel
+                </Link>
               </nav>
             </ScrollArea>
           </div>

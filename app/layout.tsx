@@ -4,6 +4,7 @@ import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
 import { ThemeProvider } from "@/components/theme-provider"
+import { ApiConfigProvider } from "@/lib/api-config"
 import "./globals.css"
 import { Suspense } from "react"
 
@@ -23,7 +24,7 @@ export default function RootLayout({
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable}`}>
         <Suspense fallback={null}>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-            {children}
+            <ApiConfigProvider>{children}</ApiConfigProvider>
           </ThemeProvider>
           <Analytics />
         </Suspense>

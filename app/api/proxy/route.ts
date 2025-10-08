@@ -1,12 +1,10 @@
 import { type NextRequest, NextResponse } from "next/server"
 
-const BASE_URL = "https://codeskytz-api-lajj0.sevalla.app"
-
 export async function POST(request: NextRequest) {
   try {
-    const { method, endpoint, body } = await request.json()
+    const { method, endpoint, body, baseUrl } = await request.json()
 
-    const url = `${BASE_URL}${endpoint}`
+    const url = `${baseUrl}${endpoint}`
 
     const options: RequestInit = {
       method,
