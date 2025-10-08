@@ -21,7 +21,7 @@ export default function WebhooksPage() {
       <h3>cURL Example</h3>
       <CodeBlock
         language="bash"
-        code={`curl -X POST https://codeskytz-api-lajj0.sevalla.app/sessions/408f7372-f7c9-4299-a8db-326bc5548a73/webhook \\
+        code={`curl -X POST https://codeskytz-api-lajj0.sevalla.app/sessions/:id/webhook \\
   -H "Content-Type: application/json" \\
   -d '{"url":"https://your-server.com/webhook"}'`}
       />
@@ -31,7 +31,7 @@ export default function WebhooksPage() {
       <CodeBlock
         language="json"
         code={`{
-  "sessionId": "408f7372-f7c9-4299-a8db-326bc5548a73",
+  "sessionId": ":id",
   "from": "+1234567890",
   "message": "Hello!",
   "timestamp": "2025-01-08T12:00:00Z"

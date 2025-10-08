@@ -31,10 +31,7 @@ export default function SessionManagementPage() {
       </p>
 
       <h3>cURL Example</h3>
-      <CodeBlock
-        language="bash"
-        code={`curl -X DELETE https://codeskytz-api-lajj0.sevalla.app/sessions/408f7372-f7c9-4299-a8db-326bc5548a73`}
-      />
+      <CodeBlock language="bash" code={`curl -X DELETE https://codeskytz-api-lajj0.sevalla.app/sessions/:id`} />
     </div>
   )
 }

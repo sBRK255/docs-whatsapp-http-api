@@ -20,7 +20,7 @@ export default function StatusBroadcastPage() {
       <h2>cURL Example</h2>
       <CodeBlock
         language="bash"
-        code={`curl -X POST https://codeskytz-api-lajj0.sevalla.app/sessions/408f7372-f7c9-4299-a8db-326bc5548a73/send-status \\
+        code={`curl -X POST https://codeskytz-api-lajj0.sevalla.app/sessions/:id/send-status \\
   -H "Content-Type: application/json" \\
   -d '{"message":"Check out our new product!"}'`}
       />
@@ -30,7 +30,7 @@ export default function StatusBroadcastPage() {
         language="python"
         code={`import requests
 
-url = "https://codeskytz-api-lajj0.sevalla.app/sessions/408f7372-f7c9-4299-a8db-326bc5548a73/send-status"
+url = "https://codeskytz-api-lajj0.sevalla.app/sessions/:id/send-status"
 payload = {"message": "Check out our new product!"}
 headers = {"Content-Type": "application/json"}
 

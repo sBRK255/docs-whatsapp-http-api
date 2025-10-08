@@ -3,11 +3,11 @@
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { Switch } from "@/components/ui/switch"
 import { Play, Trash2, Copy, Check } from "lucide-react"
 
 interface ConsoleResponse {
@@ -23,6 +23,7 @@ export function ApiConsole() {
   const [method, setMethod] = useState("POST")
   const [endpoint, setEndpoint] = useState("/sessions/:id/send-message")
   const [body, setBody] = useState('{\n  "to": "+1234567890",\n  "message": "Hello from API"\n}')
+  const [includeBody, setIncludeBody] = useState(true)
   const [responses, setResponses] = useState<ConsoleResponse[]>([])
   const [loading, setLoading] = useState(false)
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null)
@@ -43,7 +44,7 @@ export function ApiConsole() {
         body: JSON.stringify({
           method,
           endpoint,
-          body: method !== "GET" ? body : undefined,
+          body: includeBody ? body : undefined,
         }),
       })
 
@@ -97,24 +98,13 @@ export function ApiConsole() {
   }
 
   return (
-    <Card className="w-full">
-      <Tabs defaultValue="request" className="w-full">
-        <TabsList className="w-full justify-start rounded-none border-b bg-muted/50 p-0">
-          <TabsTrigger
-            value="request"
-            className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary"
-          >
-            Request
-          </TabsTrigger>
-          <TabsTrigger
-            value="response"
-            className="rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary"
-          >
-            Response
-          </TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="request" className="p-4 space-y-4">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
+      {/* Request Section */}
+      <Card className="flex flex-col">
+        <div className="border-b bg-muted/50 px-4 py-3">
+          <h3 className="font-semibold">Request</h3>
+        </div>
+        <div className="p-4 space-y-4 flex-1">
           <div className="flex flex-col sm:flex-row gap-2">
             <select
               value={method}
@@ -139,7 +129,17 @@ export function ApiConsole() {
             <Input value={baseUrl} disabled className="font-mono text-sm" />
           </div>
 
-          {method !== "GET" && (
+          <div className="flex items-center justify-between p-3 border rounded-md">
+            <div className="space-y-0.5">
+              <Label htmlFor="include-body" className="text-sm font-medium">
+                Include Request Body
+              </Label>
+              <p className="text-xs text-muted-foreground">Enable to send a JSON body with your request</p>
+            </div>
+            <Switch id="include-body" checked={includeBody} onCheckedChange={setIncludeBody} />
+          </div>
+
+          {includeBody && (
             <div className="space-y-2">
               <Label>Request Body (JSON)</Label>
               <Textarea
@@ -161,63 +161,67 @@ export function ApiConsole() {
               Clear
             </Button>
           </div>
-        </TabsContent>
+        </div>
+      </Card>
 
-        <TabsContent value="response" className="p-0">
-          <ScrollArea className="h-96">
-            {responses.length === 0 ? (
-              <div className="flex items-center justify-center h-96 text-muted-foreground">
-                No responses yet. Execute a request to see results.
-              </div>
-            ) : (
-              <div className="p-4 space-y-4">
-                {responses.map((resp, index) => (
-                  <Card key={index} className="p-4 space-y-2">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="space-y-1 flex-1 min-w-0">
-                        <div className="flex items-center gap-2 flex-wrap">
-                          <span className="text-xs text-muted-foreground">{resp.timestamp}</span>
-                          <span className="px-2 py-0.5 text-xs font-mono bg-muted rounded">{resp.method}</span>
-                          {resp.status && (
-                            <span
-                              className={`px-2 py-0.5 text-xs font-mono rounded ${
-                                resp.status >= 200 && resp.status < 300
-                                  ? "bg-green-500/10 text-green-500"
-                                  : "bg-red-500/10 text-red-500"
-                              }`}
-                            >
-                              {resp.status}
-                            </span>
-                          )}
-                        </div>
-                        <p className="text-sm font-mono break-all">{resp.url}</p>
+      {/* Response Section */}
+      <Card className="flex flex-col">
+        <div className="border-b bg-muted/50 px-4 py-3">
+          <h3 className="font-semibold">Response</h3>
+        </div>
+        <ScrollArea className="flex-1 h-[600px]">
+          {responses.length === 0 ? (
+            <div className="flex items-center justify-center h-full text-muted-foreground p-4">
+              No responses yet. Execute a request to see results.
+            </div>
+          ) : (
+            <div className="p-4 space-y-4">
+              {responses.map((resp, index) => (
+                <Card key={index} className="p-4 space-y-2">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="space-y-1 flex-1 min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="text-xs text-muted-foreground">{resp.timestamp}</span>
+                        <span className="px-2 py-0.5 text-xs font-mono bg-muted rounded">{resp.method}</span>
+                        {resp.status && (
+                          <span
+                            className={`px-2 py-0.5 text-xs font-mono rounded ${
+                              resp.status >= 200 && resp.status < 300
+                                ? "bg-green-500/10 text-green-500"
+                                : "bg-red-500/10 text-red-500"
+                            }`}
+                          >
+                            {resp.status}
+                          </span>
+                        )}
                       </div>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        onClick={() => copyResponse(index, resp.response || resp.error || "")}
-                        className="shrink-0"
-                      >
-                        {copiedIndex === index ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-                      </Button>
+                      <p className="text-sm font-mono break-all">{resp.url}</p>
                     </div>
-                    {resp.response && (
-                      <pre className="text-xs bg-muted p-3 rounded overflow-x-auto">
-                        <code>{resp.response}</code>
-                      </pre>
-                    )}
-                    {resp.error && (
-                      <pre className="text-xs bg-red-500/10 text-red-500 p-3 rounded overflow-x-auto">
-                        <code>{resp.error}</code>
-                      </pre>
-                    )}
-                  </Card>
-                ))}
-              </div>
-            )}
-          </ScrollArea>
-        </TabsContent>
-      </Tabs>
-    </Card>
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      onClick={() => copyResponse(index, resp.response || resp.error || "")}
+                      className="shrink-0"
+                    >
+                      {copiedIndex === index ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+                    </Button>
+                  </div>
+                  {resp.response && (
+                    <pre className="text-xs bg-muted p-3 rounded overflow-x-auto">
+                      <code>{resp.response}</code>
+                    </pre>
+                  )}
+                  {resp.error && (
+                    <pre className="text-xs bg-red-500/10 text-red-500 p-3 rounded overflow-x-auto">
+                      <code>{resp.error}</code>
+                    </pre>
+                  )}
+                </Card>
+              ))}
+            </div>
+          )}
+        </ScrollArea>
+      </Card>
+    </div>
   )
 }

@@ -22,7 +22,7 @@ export default function ForwardingPage() {
       <h3>cURL Example</h3>
       <CodeBlock
         language="bash"
-        code={`curl -X POST https://codeskytz-api-lajj0.sevalla.app/sessions/408f7372-f7c9-4299-a8db-326bc5548a73/forward \\
+        code={`curl -X POST https://codeskytz-api-lajj0.sevalla.app/sessions/:id/forward \\
   -H "Content-Type: application/json" \\
   -d '{"messageId":"msg_123456","to":"+1234567890"}'`}
       />
@@ -32,7 +32,7 @@ export default function ForwardingPage() {
         language="python"
         code={`import requests
 
-url = "https://codeskytz-api-lajj0.sevalla.app/sessions/408f7372-f7c9-4299-a8db-326bc5548a73/forward"
+url = "https://codeskytz-api-lajj0.sevalla.app/sessions/:id/forward"
 payload = {"messageId": "msg_123456", "to": "+1234567890"}
 headers = {"Content-Type": "application/json"}
 

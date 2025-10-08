@@ -21,7 +21,7 @@ export default function SendMessagePage() {
       <h2>cURL Example</h2>
       <CodeBlock
         language="bash"
-        code={`curl -X POST https://codeskytz-api-lajj0.sevalla.app/sessions/408f7372-f7c9-4299-a8db-326bc5548a73/send-message \\
+        code={`curl -X POST https://codeskytz-api-lajj0.sevalla.app/sessions/:id/send-message \\
   -H "Content-Type: application/json" \\
   -d '{"to":"+1234567890","message":"Hello from API"}'`}
       />
@@ -31,7 +31,7 @@ export default function SendMessagePage() {
         language="python"
         code={`import requests
 
-url = "https://codeskytz-api-lajj0.sevalla.app/sessions/408f7372-f7c9-4299-a8db-326bc5548a73/send-message"
+url = "https://codeskytz-api-lajj0.sevalla.app/sessions/:id/send-message"
 payload = {"to": "+1234567890", "message": "Hello from API"}
 headers = {"Content-Type": "application/json"}
 
@@ -42,7 +42,7 @@ print(response.json())`}
       <h2>JavaScript Example</h2>
       <CodeBlock
         language="javascript"
-        code={`fetch('https://codeskytz-api-lajj0.sevalla.app/sessions/408f7372-f7c9-4299-a8db-326bc5548a73/send-message', {
+        code={`fetch('https://codeskytz-api-lajj0.sevalla.app/sessions/:id/send-message', {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({ to: '+1234567890', message: 'Hello from API' })
